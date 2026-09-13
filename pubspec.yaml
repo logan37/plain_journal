@@ -1,5 +1,5 @@
 name: plain_journal
-description: "A new Flutter project."
+description: "A private journal tracker with mood, food, period tracking, weather, and calendar insights."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

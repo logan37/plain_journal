@@ -1,4 +1,4 @@
-package com.example.plain_journal
+package com.logan.plainjournal
 
 import io.flutter.embedding.android.FlutterActivity
 

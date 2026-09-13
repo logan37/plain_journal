@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <!-- White journal page (centered in the 66dp safe zone) -->
+  <path
+      android:fillColor="#FFFFFF"
+      android:pathData="M38,30 L70,30 C72.2,30 74,31.8 74,34 L74,74 C74,76.2 72.2,78 70,78 L38,78 C35.8,78 34,76.2 34,74 L34,34 C34,31.8 35.8,30 38,30 Z" />
+  <!-- Dark teal header band -->
+  <path
+      android:fillColor="#2E6B5B"
+      android:pathData="M38,30 L70,30 C72.2,30 74,31.8 74,34 L74,42 L34,42 L34,34 C34,31.8 35.8,30 38,30 Z" />
+  <!-- Writing lines -->
+  <path
+      android:strokeColor="#3B8875"
+      android:strokeWidth="1.8"
+      android:strokeLineCap="round"
+      android:pathData="M42,50 L66,50" />
+  <path
+      android:strokeColor="#3B8875"
+      android:strokeWidth="1.8"
+      android:strokeLineCap="round"
+      android:pathData="M42,57 L66,57" />
+  <path
+      android:strokeColor="#3B8875"
+      android:strokeWidth="1.8"
+      android:strokeLineCap="round"
+      android:pathData="M42,64 L58,64" />
+  <path
+      android:strokeColor="#3B8875"
+      android:strokeWidth="1.8"
+      android:strokeLineCap="round"
+      android:pathData="M42,71 L66,71" />
+</vector>
