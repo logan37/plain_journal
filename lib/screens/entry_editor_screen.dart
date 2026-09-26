@@ -157,18 +157,20 @@ class _EntryEditorScreenState extends State<EntryEditorScreen> {
             onAddSuggestion: widget.app.addCustomTag,
             hintText: 'Add a tag',
           ),
-          const SizedBox(height: 24),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: const Text('Period day'),
-            subtitle: const Text('Mark this day for cycle tracking'),
-            secondary: const Icon(
-              Icons.favorite,
-              color: Color(0xFFE91E63),
+          if (widget.app.showPeriodTracking) ...[
+            const SizedBox(height: 24),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Period day'),
+              subtitle: const Text('Mark this day for cycle tracking'),
+              secondary: const Icon(
+                Icons.favorite,
+                color: Color(0xFFE91E63),
+              ),
+              value: _hasPeriod,
+              onChanged: (value) => setState(() => _hasPeriod = value),
             ),
-            value: _hasPeriod,
-            onChanged: (value) => setState(() => _hasPeriod = value),
-          ),
+          ],
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/gender.dart';
 import '../models/journal_entry.dart';
 import '../models/weather_models.dart';
 import 'journal_repository.dart';
@@ -15,6 +16,7 @@ class LocalJournalRepository implements JournalRepository {
   static const _entriesKey = 'journal.entries';
   static const _cityKey = 'journal.city';
   static const _customTagsKey = 'journal.customTags';
+  static const _genderKey = 'journal.gender';
 
   @override
   Future<List<JournalEntry>> loadEntries() async {
@@ -70,5 +72,19 @@ class LocalJournalRepository implements JournalRepository {
   Future<void> saveCustomTags(List<String> tags) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(_customTagsKey, tags.toSet().toList());
+  }
+
+  @override
+  Future<Gender?> loadGender() async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString(_genderKey);
+    if (name == null || name.isEmpty) return null;
+    return Gender.fromName(name);
+  }
+
+  @override
+  Future<void> saveGender(Gender gender) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_genderKey, gender.name);
   }
 }

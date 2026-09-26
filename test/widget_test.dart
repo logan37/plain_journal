@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:plain_journal/data/local_journal_repository.dart';
+import 'package:plain_journal/models/gender.dart';
 import 'package:plain_journal/models/journal_entry.dart';
 import 'package:plain_journal/models/mood.dart';
 import 'package:plain_journal/models/weather_models.dart';
@@ -135,6 +136,20 @@ void main() {
       await repo.saveCustomTags(['focus', 'focus', 'books']);
       expect(await repo.loadCustomTags(), ['focus', 'books']);
     });
+
+    test('persists gender, defaulting to null', () async {
+      final repo = LocalJournalRepository();
+      expect(await repo.loadGender(), isNull);
+
+      await repo.saveGender(Gender.female);
+      expect(await repo.loadGender(), Gender.female);
+
+      await repo.saveGender(Gender.male);
+      expect(await repo.loadGender(), Gender.male);
+
+      await repo.saveGender(Gender.preferNotToSay);
+      expect(await repo.loadGender(), Gender.preferNotToSay);
+    });
   });
 
   group('AppState', () {
@@ -213,6 +228,26 @@ void main() {
       app.addCustomTag('focus');
       expect(app.customTags, ['focus']);
       expect(app.allTags, contains('focus'));
+    });
+
+    test('setGender persists and drives showPeriodTracking', () async {
+      await app.ensureLoaded();
+      expect(app.gender, isNull);
+      expect(app.showPeriodTracking, isFalse);
+
+      await app.setGender(Gender.female);
+      expect(app.gender, Gender.female);
+      expect(app.showPeriodTracking, isTrue);
+
+      // A fresh instance loads the choice back from storage.
+      final fresh = AppState(repository: LocalJournalRepository());
+      await fresh.ensureLoaded();
+      expect(fresh.gender, Gender.female);
+      expect(fresh.showPeriodTracking, isTrue);
+
+      await app.setGender(Gender.male);
+      expect(app.gender, Gender.male);
+      expect(app.showPeriodTracking, isFalse);
     });
   });
 }

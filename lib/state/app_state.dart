@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 import '../data/journal_repository.dart';
+import '../models/gender.dart';
 import '../models/journal_entry.dart';
 import '../models/mood.dart';
 import '../models/weather_models.dart';
@@ -45,6 +46,7 @@ class AppState extends ChangeNotifier {
 
   CityLocation? _city;
   List<String> _customTags = [];
+  Gender? _gender;
 
   WeatherBundle? _weather;
   String? _weatherError;
@@ -55,6 +57,11 @@ class AppState extends ChangeNotifier {
 
   CityLocation? get city => _city;
   List<String> get customTags => List.unmodifiable(_customTags);
+  Gender? get gender => _gender;
+
+  /// Whether period-related tracking controls should be shown.
+  bool get showPeriodTracking => _gender == Gender.female;
+
   WeatherBundle? get weather => _weather;
   bool get weatherLoading => _weatherLoading;
   String? get weatherError => _weatherError;
@@ -75,11 +82,13 @@ class AppState extends ChangeNotifier {
       repository.loadEntries(),
       repository.loadCity(),
       repository.loadCustomTags(),
+      repository.loadGender(),
     ]);
 
     _entries = results[0] as List<JournalEntry>;
     _city = results[1] as CityLocation?;
     _customTags = results[2] as List<String>;
+    _gender = results[3] as Gender?;
 
     _index();
     _loaded = true;
@@ -161,6 +170,13 @@ class AppState extends ChangeNotifier {
     _customTags.add(trimmed);
     repository.saveCustomTags(_customTags);
     notifyListeners();
+  }
+
+  /// Sets the user's gender and persists it.
+  Future<void> setGender(Gender gender) async {
+    _gender = gender;
+    notifyListeners();
+    await repository.saveGender(gender);
   }
 
   // ---- Weather -----------------------------------------------------------

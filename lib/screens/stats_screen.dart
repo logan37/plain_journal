@@ -77,13 +77,15 @@ class _StatsScreenState extends State<StatsScreen> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  _StatCard(
-                    icon: Icons.favorite,
-                    value: '${app.periodDayCount}',
-                    label: 'period days',
-                    color: const Color(0xFFE91E63),
-                  ),
-                  const SizedBox(width: 10),
+                  if (app.showPeriodTracking) ...[
+                    _StatCard(
+                      icon: Icons.favorite,
+                      value: '${app.periodDayCount}',
+                      label: 'period days',
+                      color: const Color(0xFFE91E63),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
                   _StatCard(
                     icon: Icons.label_outline,
                     value: '${app.tagCounts().length}',

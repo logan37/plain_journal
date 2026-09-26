@@ -44,6 +44,7 @@ class _DayScreenState extends State<DayScreen> {
                 for (final entry in entries)
                   _EntryCard(
                     entry: entry,
+                    showPeriod: app.showPeriodTracking,
                     onEdit: () => _editEntry(entry),
                     onDelete: () => _deleteEntry(entry),
                   ),
@@ -203,11 +204,13 @@ class _DayWeather extends StatelessWidget {
 class _EntryCard extends StatelessWidget {
   const _EntryCard({
     required this.entry,
+    required this.showPeriod,
     required this.onEdit,
     required this.onDelete,
   });
 
   final JournalEntry entry;
+  final bool showPeriod;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
@@ -245,7 +248,7 @@ class _EntryCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (entry.hasPeriod)
+                if (showPeriod && entry.hasPeriod)
                   const Icon(Icons.favorite, size: 18, color: Color(0xFFE91E63)),
                 IconButton(
                   tooltip: 'Edit',

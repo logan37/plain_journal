@@ -12,10 +12,10 @@ void main() {
 
   testWidgets('capture marketing screenshots', (tester) async {
     final today = DateTime.now();
-    final day = (int daysBack) =>
-        DateTime(today.year, today.month, today.day).subtract(
-          Duration(days: daysBack),
-        );
+DateTime day(int daysBack) =>
+    DateTime(today.year, today.month, today.day).subtract(
+      Duration(days: daysBack),
+    );
 
     final state = AppState(repository: LocalJournalRepository());
     await state.ensureLoaded();
@@ -89,8 +89,22 @@ void main() {
     await tester.pumpWidget(app.PlainJournalApp(app: state));
     await tester.pumpAndSettle();
 
+    // First-run gender onboarding dialog appears automatically.
+    await Future<void>.delayed(const Duration(milliseconds: 900));
+    await tester.pumpAndSettle();
+
     await binding.convertFlutterSurfaceToImage();
     await tester.pump(const Duration(milliseconds: 300));
+
+    await binding.takeScreenshot('00_onboarding');
+    await tester.pump(const Duration(milliseconds: 400));
+
+    await tester.tap(find.text('Female'));
+    await tester.pump(const Duration(milliseconds: 250));
+    await binding.takeScreenshot('00b_onboarding_selected');
+
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
 
     await binding.takeScreenshot('01_home');
     await tester.pump(const Duration(milliseconds: 400));

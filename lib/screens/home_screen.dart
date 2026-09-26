@@ -5,6 +5,7 @@ import '../models/journal_entry.dart';
 import '../state/app_state.dart';
 import '../utils/date_utils.dart' as utils;
 import 'day_screen.dart';
+import 'settings_screen.dart';
 import 'stats_screen.dart';
 import 'weather_screen.dart';
 
@@ -35,7 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
     final today = utils.dayOnly(DateTime.now());
     _focusedDay = today;
     _selectedDay = today;
-    widget.app.ensureLoaded();
+    widget.app.ensureLoaded().then((_) => _maybePromptGender());
+  }
+
+  /// Shows the first-run gender dialog once data has loaded and the first
+  /// frame is on screen.
+  Future<void> _maybePromptGender() async {
+    if (!mounted || widget.app.gender != null) return;
+    await Future<void>.delayed(const Duration(milliseconds: 400));
+    if (!mounted || widget.app.gender != null) return;
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => GenderOnboardingDialog(app: widget.app),
+    );
   }
 
   List<_DayMarker> _eventLoader(DateTime day) {
@@ -44,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       _DayMarker(
         widget.app.bestMoodForDay(day)?.color,
-        widget.app.isPeriodDay(day),
+        widget.app.showPeriodTracking && widget.app.isPeriodDay(day),
       ),
     ];
   }
@@ -58,6 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Plain Journal'),
         actions: [
+          IconButton(
+            tooltip: 'Settings',
+            icon: const Icon(Icons.settings_outlined),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => SettingsScreen(app: app),
+              ),
+            ),
+          ),
           IconButton(
             tooltip: 'Stats',
             icon: const Icon(Icons.show_chart),
@@ -324,7 +347,7 @@ class _SelectedDayPanel extends StatelessWidget {
     final mood = app.bestMoodForDay(date);
     final tags = app.tagsForDay(date);
     final isToday = utils.isSameDay(date, DateTime.now());
-    final isPeriod = app.isPeriodDay(date);
+    final isPeriod = app.showPeriodTracking && app.isPeriodDay(date);
 
     return Card(
       elevation: 0,

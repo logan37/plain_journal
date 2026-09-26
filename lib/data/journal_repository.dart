@@ -1,3 +1,4 @@
+import '../models/gender.dart';
 import '../models/journal_entry.dart';
 import '../models/weather_models.dart';
 
@@ -21,4 +22,8 @@ abstract class JournalRepository {
   /// Custom tags the user has created beyond the built-in defaults.
   Future<List<String>> loadCustomTags();
   Future<void> saveCustomTags(List<String> tags);
+
+  /// The user's gender, or null if never set.
+  Future<Gender?> loadGender();
+  Future<void> saveGender(Gender gender);
 }
